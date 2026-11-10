@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/com/campushub/dao/ReviewIdeasDAO.java" value="cadb5113-5182-424c-beac-d63903b657ed" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/campushub/dao/SkillDAO.java" value="cadb5113-5182-424c-beac-d63903b657ed" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/campushub/servlet/ApproveProjectsServlet.java" value="cadb5113-5182-424c-beac-d63903b657ed" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/campushub/servlet/MyProjectsServlet.java" value="cadb5113-5182-424c-beac-d63903b657ed" />
+  </component>
+</project>
