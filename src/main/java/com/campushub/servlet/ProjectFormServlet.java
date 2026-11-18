@@ -1,6 +1,9 @@
 package com.campushub.servlet;
 
 import com.campushub.util.DBConnection;
+import com.campushub.dao.IdeaDAO;
+import com.campushub.exception.DatabaseException;
+import com.campushub.model.Idea;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -388,14 +391,12 @@ public class ProjectFormServlet extends HttpServlet {
 
         List<Map<String, Object>> mentors = new ArrayList<>();
 
-        String ideaSql =
-                "SELECT i.idea_id, i.title " +
-                        "FROM ideas i " +
-                        "LEFT JOIN projects p ON i.idea_id = p.idea_id " +
-                        "WHERE i.student_id = ? " +
-                        "AND i.status = 'APPROVED' " +
-                        "AND p.project_id IS NULL " +
-                        "ORDER BY i.submitted_at DESC";
+        String ideaSql = "SELECT i.idea_id, i.title " +
+                "FROM ideas i " +
+                "WHERE i.student_id = ? " +
+                "AND i.status = 'APPROVED' " +
+                "AND NOT EXISTS (SELECT 1 FROM projects p WHERE p.idea_id = i.idea_id) " +
+                "ORDER BY i.submitted_at DESC";
 
         String mentorSql =
                 "SELECT u.user_id, u.name, mp.specialization " +
