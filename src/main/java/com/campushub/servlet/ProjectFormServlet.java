@@ -35,6 +35,8 @@ public class ProjectFormServlet extends HttpServlet {
             throws ServletException, IOException {
 
         Integer userId = getLoggedInUserId(request, response);
+        // Log the retrieved userId for debugging
+        getServletContext().log("ProjectFormServlet.doGet - retrieved userId: " + userId);
 
         if (userId == null) {
             return;
@@ -55,6 +57,8 @@ public class ProjectFormServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         Integer userId = getLoggedInUserId(request, response);
+        // Log the retrieved userId for debugging
+        getServletContext().log("ProjectFormServlet.doGet - retrieved userId: " + userId);
 
         if (userId == null) {
             return;
@@ -463,11 +467,9 @@ public class ProjectFormServlet extends HttpServlet {
         request.setAttribute("availableIdeas", availableIdeas);
         request.setAttribute("mentors", mentors);
 
-        getServletContext().log(
-                "Project Form Debug: userId=" + userId
-                        + ", availableIdeas=" + availableIdeas.size()
-                        + ", mentors=" + mentors.size()
-        );
+        System.out.println("DEBUG: userId=" + userId
+                + ", ideas=" + availableIdeas.size()
+                + ", mentors=" + mentors.size());
     }
 
     // Display form error
