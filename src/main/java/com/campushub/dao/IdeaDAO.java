@@ -117,6 +117,49 @@ public class IdeaDAO {
     }
 
 
+// =========================
+// GET APPROVED IDEAS BY STUDENT
+// =========================
+
+    public List<Idea> getApprovedIdeasByStudent(int studentId)
+            throws DatabaseException {
+
+        List<Idea> ideas = new ArrayList<>();
+
+        String sql = """
+            SELECT i.*
+            FROM ideas i
+            WHERE i.student_id = ?
+              AND i.status = 'APPROVED'
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM projects p
+                  WHERE p.idea_id = i.idea_id
+              )
+            ORDER BY i.idea_id DESC
+            """;
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, studentId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ideas.add(extractIdea(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException(
+                    "Unable to retrieve approved ideas for student.",
+                    e
+            );
+        }
+
+        return ideas;
+    }
+
     // =========================
     // UPDATE
     // =========================

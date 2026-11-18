@@ -218,7 +218,36 @@ public class UserDAO {
         return null;
     }
 
+    public List<User> getActiveMentors() throws DatabaseException {
 
+        List<User> mentors = new ArrayList<>();
+
+        String sql = """
+            SELECT *
+            FROM users
+            WHERE role = 'MENTOR'
+              AND status = 'ACTIVE'
+            ORDER BY name
+            """;
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setName(rs.getString("name"));
+                mentors.add(user);
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException(
+                    "Unable to retrieve active mentors.", e);
+        }
+
+        return mentors;
+    }
     private User extractUser(ResultSet rs)
             throws SQLException {
 

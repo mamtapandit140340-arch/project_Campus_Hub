@@ -13,16 +13,15 @@ public class ProjectDAO {
     // =========================
     // CREATE
     // =========================
-
     public boolean addProject(Project project) throws DatabaseException {
 
         String sql = """
-                INSERT INTO projects
-                (idea_id, mentor_id, project_name, description,
-                 start_date, expected_end_date, status,
-                 progress_percentage)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                """;
+            INSERT INTO projects
+            (idea_id, mentor_id, project_name, description,
+             start_date, expected_end_date, status,
+             progress_percentage, approval_status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """;
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(
@@ -37,25 +36,23 @@ public class ProjectDAO {
             ps.setString(7, project.getStatus());
             ps.setInt(8, project.getProgressPercentage());
 
+            // Newly created projects must wait for mentor approval
+            ps.setString(9, "PENDING");
+
             int rows = ps.executeUpdate();
 
             if (rows > 0) {
-
-                ResultSet rs = ps.getGeneratedKeys();
-
-                if (rs.next()) {
-                    project.setProjectId(rs.getInt(1));
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        project.setProjectId(rs.getInt(1));
+                    }
                 }
-
                 return true;
             }
 
         } catch (SQLException e) {
-
             throw new DatabaseException(
-                    "Unable to add project to the database.",
-                    e
-            );
+                    "Unable to add project to the database.", e);
         }
 
         return false;
@@ -237,6 +234,9 @@ public class ProjectDAO {
 
         project.setStatus(
                 rs.getString("status")
+        );
+        project.setApprovalStatus(
+                rs.getString("approval_status")
         );
 
         project.setProgressPercentage(

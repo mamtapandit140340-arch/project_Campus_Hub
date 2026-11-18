@@ -110,6 +110,17 @@ public class Project {
         this.progressPercentage = progressPercentage;
     }
 
+    //change on 18/11
+    private String approvalStatus;
+
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+//till this
     public Timestamp getCreatedAt() {
         return createdAt;
     }

@@ -777,9 +777,7 @@
                                 </c:if>>
 
                                 <c:out value="${idea.title}"/>
-
                             </option>
-
                         </c:forEach>
 
                     </select>
@@ -845,16 +843,11 @@
                             </option>
 
                         </c:forEach>
-
                     </select>
-
                 </div>
 
-
                 <!-- DESCRIPTION -->
-
                 <div class="form-group">
-
                     <label for="description">
                         Project Description
                     </label>

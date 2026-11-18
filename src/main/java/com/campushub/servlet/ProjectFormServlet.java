@@ -43,7 +43,6 @@ public class ProjectFormServlet extends HttpServlet {
                 .forward(request, response);
     }
 
-
     // Save new project
     @Override
     protected void doPost(HttpServletRequest request,
@@ -79,12 +78,10 @@ public class ProjectFormServlet extends HttpServlet {
             return;
         }
 
-
         // Validate idea ID
         int ideaId;
 
         try {
-
             ideaId = Integer.parseInt(ideaValue);
 
             if (ideaId <= 0) {
@@ -115,10 +112,8 @@ public class ProjectFormServlet extends HttpServlet {
 
             showError(request, response,
                     "Please select a valid mentor.");
-
             return;
         }
-
 
         // Read optional dates
         Date startDate;
@@ -139,7 +134,6 @@ public class ProjectFormServlet extends HttpServlet {
 
             return;
         }
-
 
         // Validate project dates
         if (startDate != null &&
@@ -176,7 +170,6 @@ public class ProjectFormServlet extends HttpServlet {
 
                 return;
             }
-
 
             // Check selected mentor
             if (!isActiveMentor(connection, mentorId)) {
@@ -260,7 +253,6 @@ public class ProjectFormServlet extends HttpServlet {
                     ps.executeUpdate();
                 }
 
-
                 // Save both project and membership
                 connection.commit();
 
@@ -272,30 +264,22 @@ public class ProjectFormServlet extends HttpServlet {
                 throw e;
 
             } finally {
-
                 connection.setAutoCommit(originalAutoCommit);
             }
 
         } catch (SQLException e) {
-
             getServletContext().log(
-                    "Error creating project for student ID: " + userId,
-                    e
-            );
+                    "Error creating project for student ID: " + userId, e);
 
             throw new ServletException(
-                    "Unable to create the project. Please try again.",
-                    e
-            );
+                    "Unable to create the project. Please try again.", e);
         }
-
 
         // Redirect after successful creation
         response.sendRedirect(
                 request.getContextPath() + "/projects?created=1"
         );
     }
-
 
     // Get logged-in user ID
     private Integer getLoggedInUserId(HttpServletRequest request,
@@ -309,20 +293,16 @@ public class ProjectFormServlet extends HttpServlet {
             response.sendRedirect(
                     request.getContextPath() + "/login.jsp"
             );
-
             return null;
         }
 
         try {
-
             return Integer.parseInt(
                     String.valueOf(session.getAttribute("userId"))
             );
 
         } catch (NumberFormatException e) {
-
             session.invalidate();
-
             response.sendRedirect(
                     request.getContextPath() + "/login.jsp"
             );
@@ -378,7 +358,6 @@ public class ProjectFormServlet extends HttpServlet {
             }
         }
     }
-
 
     // Check selected mentor
     private boolean isActiveMentor(Connection connection, int mentorId)
@@ -482,6 +461,12 @@ public class ProjectFormServlet extends HttpServlet {
 
         request.setAttribute("availableIdeas", availableIdeas);
         request.setAttribute("mentors", mentors);
+
+        getServletContext().log(
+                "Project Form Debug: userId=" + userId
+                        + ", availableIdeas=" + availableIdeas.size()
+                        + ", mentors=" + mentors.size()
+        );
     }
 
     // Display form error
